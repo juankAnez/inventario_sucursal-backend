@@ -1,53 +1,55 @@
 from django.db import models
 
-class Categoria(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True)
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
     
     class Meta:
-        verbose_name_plural = "Categorías"  # Para el admin
+        verbose_name_plural = "Categories"
     
     def __str__(self):
-        return self.nombre
+        return self.name
 
-class Proveedor(models.Model):
-    nombre = models.CharField(max_length=200)
-    contacto = models.CharField(max_length=100)
-    telefono = models.CharField(max_length=20)
+class Supplier(models.Model):
+    name = models.CharField(max_length=200)
+    contact = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
     email = models.EmailField()
     
     class Meta:
-        verbose_name_plural = "Proveedores"
+        verbose_name_plural = "Suppliers"
     
     def __str__(self):
-        return self.nombre
+        return self.name
 
-class Producto(models.Model):
-    codigo = models.CharField(max_length=50, unique=True)
-    nombre = models.CharField(max_length=200)
-    descripcion = models.TextField(blank=True)
-    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, related_name='productos')  # PROTECT mejor que CASCADE
-    proveedores = models.ManyToManyField(Proveedor, through='ProductoProveedor', related_name='productos')
-    precio_compra = models.DecimalField(max_digits=10, decimal_places=2)
-    precio_venta = models.DecimalField(max_digits=10, decimal_places=2)
-    activo = models.BooleanField(default=True)
+class Product(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products')
+    suppliers = models.ManyToManyField(Supplier, through='ProductSupplier', related_name='products')
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
-        return f"{self.codigo} - {self.nombre}"
+        return f"{self.code} - {self.name}"
 
-class ProductoProveedor(models.Model):
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='relaciones_proveedor')
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name='relaciones_producto')
-    precio_compra = models.DecimalField(max_digits=10, decimal_places=2)
+class ProductSupplier(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='supplier_relations')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='product_relations')
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     
     class Meta:
-        unique_together = ['producto', 'proveedor']
-        verbose_name = "Producto-Proveedor"
-        verbose_name_plural = "Productos-Proveedores"
+        unique_together = ['product', 'supplier']
+        verbose_name = "Product-Supplier"
+        verbose_name_plural = "Products-Suppliers"
 
-
-class Garantia(models.Model):
-    producto = models.OneToOneField('products.Producto', on_delete=models.CASCADE)
-    duracion_meses = models.IntegerField()
-    condiciones = models.TextField()
-    fecha_inicio = models.DateField(auto_now_add=True)        
+class Warranty(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    duration_months = models.IntegerField()
+    conditions = models.TextField()
+    start_date = models.DateField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Warranties"

@@ -1,0 +1,70 @@
+@baseUrl = http://localhost:8000
+
+### Obtener todos los lotes
+GET {{baseUrl}}/api/sales/lotes/
+
+### Obtener lote por ID
+GET {{baseUrl}}/api/sales/lotes/1/
+
+### Crear un nuevo lote
+POST {{baseUrl}}/api/sales/lotes/
+Content-Type: application/json
+
+{
+    "producto": 1,
+    "numero_lote": "LOTE001",
+    "fecha_fabricacion": "2024-01-15",
+    "fecha_vencimiento": "2025-01-15",
+    "cantidad_inicial": 100,
+    "cantidad_actual": 100
+}
+
+### Actualizar un lote
+PUT {{baseUrl}}/api/sales/lotes/1/
+Content-Type: application/json
+
+{
+    "producto": 1,
+    "numero_lote": "LOTE001",
+    "fecha_fabricacion": "2024-01-15",
+    "fecha_vencimiento": "2025-01-15",
+    "cantidad_inicial": 100,
+    "cantidad_actual": 80
+}
+
+### Eliminar un lote
+DELETE {{baseUrl}}/api/sales/lotes/1/
+
+### Obtener todos los stocks
+GET {{baseUrl}}/api/sales/stocks/
+
+### Crear un stock
+POST {{baseUrl}}/api/sales/stocks/
+Content-Type: application/json
+
+{
+    "producto": 1,
+    "sucursal": 1,
+    "ubicacion": 1,
+    "lote": 1,
+    "cantidad": 50,
+    "cantidad_minima": 10
+}
+
+### Obtener todos los movimientos
+GET {{baseUrl}}/api/sales/movimientos/
+
+### Crear un movimiento de inventario
+POST {{baseUrl}}/api/sales/movimientos/
+Content-Type: application/json
+
+{
+    "producto": 1,
+    "sucursal": 1,
+    "ubicacion": 1,
+    "lote": 1,
+    "tipo_movimiento": "ENTRADA",
+    "cantidad": 20,
+    "motivo": "Recepción de mercancía",
+    "usuario": 1
+}

@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:8000
+
+### Obtener todos los perfiles
+GET {{baseUrl}}/api/users/perfiles/
+
+### Obtener perfil por ID
+GET {{baseUrl}}/api/users/perfiles/1/
+
+### Crear un perfil de usuario
+POST {{baseUrl}}/api/users/perfiles/
+Content-Type: application/json
+
+{
+    "usuario": 1,
+    "sucursal": 1,
+    "telefono": "3009876543"
+}
+
+### Actualizar un perfil
+PUT {{baseUrl}}/api/users/perfiles/1/
+Content-Type: application/json
+
+{
+    "usuario": 1,
+    "sucursal": 1,
+    "telefono": "3001111111"
+}
+
+### Eliminar un perfil
+DELETE {{baseUrl}}/api/users/perfiles/1/

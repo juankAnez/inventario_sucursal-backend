@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:8000
+
+### Obtener todas las sucursales
+GET {{baseUrl}}/api/branches/sucursales/
+
+### Obtener sucursal por ID
+GET {{baseUrl}}/api/branches/sucursales/1/
+
+### Crear una nueva sucursal
+POST {{baseUrl}}/api/branches/sucursales/
+Content-Type: application/json
+
+{
+    "codigo": "SUC001",
+    "nombre": "Sucursal Centro",
+    "direccion": "Calle 10 #5-20",
+    "telefono": "3001234567",
+    "responsable": "María García"
+}
+
+### Actualizar una sucursal
+PUT {{baseUrl}}/api/branches/sucursales/1/
+Content-Type: application/json
+
+{
+    "codigo": "SUC001",
+    "nombre": "Sucursal Centro Actualizada",
+    "direccion": "Calle 10 #5-20",
+    "telefono": "3001234567",
+    "responsable": "María García"
+}
+
+### Eliminar una sucursal
+DELETE {{baseUrl}}/api/branches/sucursales/1/
+
+### Obtener todos los almacenes
+GET {{baseUrl}}/api/branches/almacenes/
+
+### Crear un almacén
+POST {{baseUrl}}/api/branches/almacenes/
+Content-Type: application/json
+
+{
+    "sucursal": 1,
+    "codigo": "ALM001",
+    "nombre": "Almacén Principal",
+    "descripcion": "Almacén de productos principales"
+}
+
+### Obtener todas las ubicaciones
+GET {{baseUrl}}/api/branches/ubicaciones/
+
+### Crear una ubicación
+POST {{baseUrl}}/api/branches/ubicaciones/
+Content-Type: application/json
+
+{
+    "almacen": 1,
+    "codigo": "A1-E1-N1",
+    "descripcion": "Anaquel 1, Estante 1, Nivel 1"
+}

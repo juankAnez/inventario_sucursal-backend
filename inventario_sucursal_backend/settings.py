@@ -44,11 +44,14 @@ INSTALLED_APPS = [
     'myapps.sales',
     'myapps.branches',
     'myapps.users',
+    'rest_framework',
+    'corsheaders',
 
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,47 +86,49 @@ WSGI_APPLICATION = 'inventario_sucursal_backend.wsgi.application'
 
 
     # Get the selected database engine from environment
+# Get the selected database engine from environment
 DATABASE_ENGINE = config('DATABASE_ENGINE', default='mysql')
 
 # Database configurations
 DATABASE_CONFIGS = {
     'mysql': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inventario_sucursal_mysql_django',
-        'USER': 'root',
-        'PASSWORD': '12345',
-        'HOST': '172.24.4.183',
-        'PORT': '3306',
+        'NAME': config('MYSQL_NAME'),
+        'USER': config('MYSQL_USER'),
+        'PASSWORD': config('MYSQL_PASSWORD'),
+        'HOST': config('MYSQL_HOST'),
+        'PORT': config('MYSQL_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
     },
     'postgresql': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'inventario_sucursal_postgres_django',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': '172.24.4.183',
-        'PORT': '5432',
+        'NAME': config('POSTGRES_NAME'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('POSTGRES_HOST'),
+        'PORT': config('POSTGRES_PORT'),
     },
     'mssql': {
         'ENGINE': 'mssql',
-        'NAME': 'inventario_sucursal_sqlserver_django',
-        'USER': 'sa',
-        'PASSWORD': 'Admin12345!',
-        'HOST': '172.24.4.183',
-        'PORT': '1433',
+        'NAME': config('MSSQL_NAME'),
+        'USER': config('MSSQL_USER'),
+        'PASSWORD': config('MSSQL_PASSWORD'),
+        'HOST': config('MSSQL_HOST'),
+        'PORT': config('MSSQL_PORT'),
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     },
     'oracle': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': f"{config('ORACLE_HOST', default='172.24.4.183')}:{config('ORACLE_PORT', default='1521')}/{config('ORACLE_SID', default='XE')}",
-        'USER': config('ORACLE_USER', default='system'),
-        'PASSWORD': config('ORACLE_PASSWORD', default='Admin12345!'),
+        'NAME': f"{config('ORACLE_HOST')}:{config('ORACLE_PORT')}/{config('ORACLE_SID', default='XE')}",
+        'USER': config('ORACLE_USER'),
+        'PASSWORD': config('ORACLE_PASSWORD'),
     },
 }
+
 # Set the database configuration based on the selected engine
 DATABASES = {
     'default': DATABASE_CONFIGS.get(DATABASE_ENGINE, DATABASE_CONFIGS['mysql'])
@@ -171,3 +176,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200',  # Angular
+    'http://localhost:8000',
+    ]

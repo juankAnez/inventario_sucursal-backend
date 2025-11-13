@@ -1,8 +1,4 @@
 from django.contrib import admin
-from .models import PerfilUsuario
+from .models import UserProfile
 
-@admin.register(PerfilUsuario)
-class PerfilUsuarioAdmin(admin.ModelAdmin):
-    list_display = ['usuario', 'sucursal', 'telefono']
-    list_filter = ['sucursal']
-    search_fields = ['usuario__username', 'telefono']
+admin.site.register(UserProfile)

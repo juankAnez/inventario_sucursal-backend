@@ -1,57 +1,57 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Lote(models.Model):
-    producto = models.ForeignKey('products.Producto', on_delete=models.CASCADE, related_name='lotes')
-    numero_lote = models.CharField(max_length=100, unique=True)  # Debería ser único
-    fecha_vencimiento = models.DateField(null=True, blank=True)
-    fecha_fabricacion = models.DateField()
-    cantidad_inicial = models.IntegerField()
-    cantidad_actual = models.IntegerField()
+class Batch(models.Model):
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='batches')
+    batch_number = models.CharField(max_length=100, unique=True)
+    expiration_date = models.DateField(null=True, blank=True)
+    manufacturing_date = models.DateField()
+    initial_quantity = models.IntegerField()
+    current_quantity = models.IntegerField()
     
     class Meta:
-        verbose_name_plural = "Lotes"
+        verbose_name_plural = "Batches"
     
     def __str__(self):
-        return f"Lote {self.numero_lote} - {self.producto.nombre}"
+        return f"Batch {self.batch_number} - {self.product.name}"
 
-class StockSucursal(models.Model):
-    producto = models.ForeignKey('products.Producto', on_delete=models.CASCADE, related_name='stocks')
-    sucursal = models.ForeignKey('branches.Sucursal', on_delete=models.CASCADE, related_name='stocks')
-    ubicacion = models.ForeignKey('branches.Ubicacion', on_delete=models.CASCADE, related_name='stocks')
-    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name='stocks')
-    cantidad = models.IntegerField(default=0)
-    cantidad_minima = models.IntegerField(default=0)
+class BranchStock(models.Model):
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='stocks')
+    branch = models.ForeignKey('branches.Branch', on_delete=models.CASCADE, related_name='stocks')
+    location = models.ForeignKey('branches.Location', on_delete=models.CASCADE, related_name='stocks')
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE, related_name='stocks')
+    quantity = models.IntegerField(default=0)
+    minimum_quantity = models.IntegerField(default=0)
     
     class Meta:
-        unique_together = ['producto', 'sucursal', 'ubicacion', 'lote']
-        verbose_name = "Stock por Sucursal"
-        verbose_name_plural = "Stocks por Sucursal"
+        unique_together = ['product', 'branch', 'location', 'batch']
+        verbose_name = "Branch Stock"
+        verbose_name_plural = "Branch Stocks"
     
     def __str__(self):
-        return f"{self.producto} - {self.sucursal}: {self.cantidad}"
+        return f"{self.product} - {self.branch}: {self.quantity}"
 
-class MovimientoInventario(models.Model):
-    TIPO_MOVIMIENTO = [
-        ('ENTRADA', 'Entrada'),
-        ('SALIDA', 'Salida'),
-        ('AJUSTE', 'Ajuste'),
+class InventoryMovement(models.Model):
+    MOVEMENT_TYPES = [
+        ('IN', 'In'),
+        ('OUT', 'Out'),
+        ('ADJUSTMENT', 'Adjustment'),
     ]
     
-    producto = models.ForeignKey('products.Producto', on_delete=models.CASCADE, related_name='movimientos')
-    sucursal = models.ForeignKey('branches.Sucursal', on_delete=models.CASCADE, related_name='movimientos')
-    ubicacion = models.ForeignKey('branches.Ubicacion', on_delete=models.CASCADE, related_name='movimientos')
-    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name='movimientos')
-    tipo_movimiento = models.CharField(max_length=10, choices=TIPO_MOVIMIENTO)
-    cantidad = models.IntegerField()
-    motivo = models.TextField()
-    usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name='movimientos_inventario')  # PROTECT es mejor aquí
-    fecha_movimiento = models.DateTimeField(auto_now_add=True)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='movements')
+    branch = models.ForeignKey('branches.Branch', on_delete=models.CASCADE, related_name='movements')
+    location = models.ForeignKey('branches.Location', on_delete=models.CASCADE, related_name='movements')
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE, related_name='movements')
+    movement_type = models.CharField(max_length=10, choices=MOVEMENT_TYPES)
+    quantity = models.IntegerField()
+    reason = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='inventory_movements')
+    movement_date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        verbose_name = "Movimiento de Inventario"
-        verbose_name_plural = "Movimientos de Inventario"
-        ordering = ['-fecha_movimiento']  # Más recientes primero
+        verbose_name = "Inventory Movement"
+        verbose_name_plural = "Inventory Movements"
+        ordering = ['-movement_date']
     
     def __str__(self):
-        return f"{self.tipo_movimiento} - {self.producto} - {self.cantidad}"
+        return f"{self.movement_type} - {self.product} - {self.quantity}"

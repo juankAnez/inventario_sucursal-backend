@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:8000
+
+### Obtener todos los productos
+GET {{baseUrl}}/api/products/productos/
+
+### Obtener producto por ID
+GET {{baseUrl}}/api/products/productos/1/
+
+### Crear un nuevo producto
+POST {{baseUrl}}/api/products/productos/
+Content-Type: application/json
+
+{
+    "codigo": "PROD001",
+    "nombre": "Laptop Dell",
+    "descripcion": "Laptop para oficina",
+    "categoria": 1,
+    "precio_compra": 2000.00,
+    "precio_venta": 2500.00,
+    "activo": true
+}
+
+### Actualizar un producto
+PUT {{baseUrl}}/api/products/productos/1/
+Content-Type: application/json
+
+{
+    "codigo": "PROD001",
+    "nombre": "Laptop Dell Actualizada",
+    "descripcion": "Laptop para oficina - Actualizada",
+    "categoria": 1,
+    "precio_compra": 2000.00,
+    "precio_venta": 2600.00,
+    "activo": true
+}
+
+### Eliminar un producto
+DELETE {{baseUrl}}/api/products/productos/1/
