@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'inventario_sucursal_backend.wsgi.application'
 
     # Get the selected database engine from environment
 # Get the selected database engine from environment
-DATABASE_ENGINE = config('DATABASE_ENGINE', default='mysql')
+DATABASE_ENGINE = config('DATABASE_ENGINE', default='oracle')
 
 # Database configurations
 DATABASE_CONFIGS = {

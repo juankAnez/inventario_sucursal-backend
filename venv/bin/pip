@@ -1,4 +1,4 @@
-#!/home/juank/inventario_sucursal-backend/venv/bin/python3
+#!/home/juank/inventario-backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
